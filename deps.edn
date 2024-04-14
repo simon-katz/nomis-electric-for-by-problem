@@ -1,0 +1,53 @@
+{:mvn/repos {"codeartifact"
+             {:url "https://statsbomb-368836370510.d.codeartifact.eu-west-2.amazonaws.com/maven/statsbomb/"}
+             ;; this repo is required for one of fileape's dependencies
+             "confluent"
+             {:url "https://packages.confluent.io/maven/"}}
+
+ :deps    {;; Basics
+           com.hyperfiddle/electric       {:git/url "https://github.com/hyperfiddle/electric" :git/sha "b32ac98df7d7ec87f225d47354671be172ffa87e"}
+           ring/ring                      {:mvn/version "1.11.0"} ; comes with Jetty
+           org.clojure/clojure            {:mvn/version "1.12.0-alpha5"}
+           org.clojure/clojurescript      {:mvn/version "1.11.121"}
+           org.clojure/tools.logging      {:mvn/version "1.2.4"}
+           ch.qos.logback/logback-classic {:mvn/version "1.4.14"}
+
+           ;; Neo Riche
+           statsbomb/neo-riche            {#_#_:mvn/version "03d971e"
+                                           :local/root "/Users/simonkatz/development-100/repositories/statsbomb/neo-riche"
+                                           #_#_:git/url "git@github.com:statsbomb/neo-riche.git"
+                                           #_#_:git/sha "1b25b4fa37a8eda80f14faa5cdd19e33dc955f58"}
+
+           ;; SQL
+           seancorfield/next.jdbc         {:mvn/version "1.2.659"}
+
+           ;; Local storage
+           alandipert/storage-atom        {:mvn/version "1.2.4"}
+
+           ;; Redshift jdbc driver
+           com.amazon.redshift/redshift-jdbc42 {:mvn/version "2.1.0.23"}
+
+           ;; Utils
+           com.nomistech/clj-utils             {:mvn/version "0.18.0"}
+           camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.3"}
+           metosin/jsonista                    {:mvn/version "0.3.7"}}
+ :paths   ["src" "resources"]
+ :aliases {:dev
+           {:extra-paths ["src-dev"]
+            :extra-deps  {thheller/shadow-cljs          {:mvn/version "2.26.2"}
+                          io.github.clojure/tools.build {:mvn/version "0.9.6"
+                                                         :exclusions  [com.google.guava/guava  ; Guava version conflict between tools.build and clojurescript.
+                                                                       org.slf4j/slf4j-nop ; clashes with app logger
+                                                                       ]}}
+            #_#_:jvm-opts ["-Xmx8G"]}
+           :prod
+           {:extra-paths ["src-prod"]}
+
+           :build ; use `clj -X:build build-client`, NOT -T! build/app classpath contamination cannot be prevented
+           {:extra-paths ["src-build"]
+            :ns-default  build
+            :extra-deps  {thheller/shadow-cljs          {:mvn/version "2.26.2"}
+                          io.github.clojure/tools.build {:mvn/version "0.9.6"
+                                                         :exclusions  [com.google.guava/guava   ; Guava version conflict between tools.build and clojurescript.
+                                                                       org.slf4j/slf4j-nop]}}} ; clashes with app logger
+           }}
