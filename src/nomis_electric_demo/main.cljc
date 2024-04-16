@@ -101,6 +101,8 @@
                          ;; a unique key for the row in the correct manner.
                          ;; But `scroll-top` keeps changing and the UI forever
                          ;; jumps about showing different rows at the top.
+
+                         ;; This doesn't work. See https://clojurians.slack.com/archives/C7Q9GSHFV/p1713279637288149?thread_ts=1713263361.207339&cid=C7Q9GSHFV
                          :v2
                          (e/for-by id-key [m ms]
                            (let [i (dec (- (get m id-key)
